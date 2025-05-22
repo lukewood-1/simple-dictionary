@@ -113,46 +113,41 @@ const MeaningDisplay = () => {
 
   async function handleFetchEn(){
     const encodedTerm = encodeURIComponent(term.slice(1));
-    const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${encodedTerm}`;
+    const url = `https://api.datamuse.com/words?sp=${encodedTerm}&max=20&md=d`;
 
     try {
       const req = await fetch(url);
-      if(!req.ok){
-        setFetched(false);
-        return
-      }
       const res = await req.json();
 
+      const defs = res[0].defs;
+      const capitalize = target => target.slice(0,1).toUpperCase() + target.slice(1);
       const data = {
-        word: res[0].word.slice(0,1).toUpperCase()
-        + res[0].word.slice(1),
+        word: capitalize(res[0].word),
+        defs: [],
+      };
 
-        defs: {
-          noun: [],
-          verb: []
-        }
-      }
+      // Sort results by part of speech
+      const nouns = defs
+        .filter(def => def.startsWith('n'))
+        .map(def => def.replace(/n\t/, 'noun - '));
+      const verbs = defs
+        .filter(def => def.startsWith('v'))
+        .map(def => def.replace(/v\t/, 'verb - '));
+      const adjectives = defs
+        .filter(def => def.startsWith('adj'))
+        .map(def => def.replace(/adj\t/, 'adjective - '));
+      const adverbs = defs
+        .filter(def => def.startsWith('adv'))
+        .map(def => def.replace(/adv\t/, 'adverb - '));
 
-      for(let defObj of res[0].meanings){
-        if(defObj.partOfSpeech === 'noun'){
-          for(let def of defObj.definitions){
-            data.defs.noun.push(def.definition)
-          }
-        }
-        if(defObj.partOfSpeech === 'verb'){
-          for(let def of defObj.definitions){
-            data.defs.verb.push(def.definition)
-          }
-        }
-      }
+      data.defs = [].concat(nouns, verbs, adjectives, adverbs);
 
       setFetched(data);
-      return true
-
+      return true;
     } catch {
       console.warn('term not found');
       setFetched(false);
-      return false
+      return false;
     }
   }
 
@@ -233,16 +228,12 @@ const MeaningDisplay = () => {
         <h2>{fetched.word}</h2>
         <h3>Definitions</h3>
         <button onClick={() => goTo('/en')}>new search</button>
-        <div className='nouns'>
-          <h4>Noun</h4>
+        <div className="defs">
           <ol>
-            {fetched.defs.noun.map(def => <li key={def}>{def}</li>)}
-          </ol>
-        </div>
-        <div className="verbs">
-          <h4>Verb</h4>
-          <ol>
-            {fetched.defs.verb.length === 0 ? <p>No verb definitions available for this term</p> : fetched.defs.verb.map(def => <li key={def}>{def}</li>)}
+            {fetched.defs.length === 0
+              ? <p>No definitions for this words, bud ;(</p>
+              : fetched.defs.map(def => <li key={def}>{def}</li>)
+            }
           </ol>
         </div>
       </div>

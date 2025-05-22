@@ -6,11 +6,13 @@ function RelatedWordsEn({wordsArr}){
     <div className="related-words">
       <h2>Related Words</h2>
       <ul>
-        {wordsArr.map(word => 
+        {wordsArr.length === 0
+          ? <p>No related words found</p>
+          : wordsArr.map(word => 
           <li key={word}>
             <Link to={'/en/meaning/:' + word}>{word}</Link>
-          </li>
-        )}
+          </li>)
+        }
       </ul>
     </div>
   )

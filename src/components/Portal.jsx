@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import Settings from "./Settings";
 
 function Portal(){
   return (

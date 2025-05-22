@@ -1,5 +1,4 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Settings from '../components/Settings';
 import EnglishDic from '../components/EnglishDic';
 import PortugueseDic from '../components/PortugueseDic';
 import Portal from '../components/Portal';
@@ -12,10 +11,6 @@ const routes = createBrowserRouter([
     path: '/',
     element: <Portal />,
     errorElement: <ErrorPage />
-  },
-  {
-    path: 'settings',
-    element: <Settings />
   },
   {
     path: 'pt',

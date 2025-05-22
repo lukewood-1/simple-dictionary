@@ -1,9 +1,7 @@
-import { useState, useEffect, useContext } from "react";
-import Context from "../context";
+import { useState, useEffect } from "react";
 
 
-function Settings(){
-  const { language, setLanguage, AppText } = useContext(Context);
+function Settings({language, setLanguage, AppText}){
   const [showSettings, setShowSettings] = useState(false);
 
   const book = JSON.parse(AppText)[language.slice(0,2)].Settings;
