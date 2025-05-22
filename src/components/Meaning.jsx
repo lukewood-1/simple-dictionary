@@ -2,11 +2,13 @@ import Context from "../context";
 import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import RelatedWordsEn from "./RelatedWordsEn";
+import Synonyms from "./Synonyms";
 
 const MeaningDisplay = () => {
   const { language } = useContext(Context);
   const [fetched, setFetched] = useState({word: ''});
   const [relatedWords, setRelatedWords] = useState([]);
+  const [syns, setSyns] = useState([]);
   const { term } = useParams();
   const [render, setRender] = useState(renderLoading());
   const goTo = useNavigate();
@@ -25,7 +27,8 @@ const MeaningDisplay = () => {
         }
       } else {
         await handleFetchEn(term.slice(1));
-        await findRelatedWordsEn()
+        await findRelatedWordsEn();
+        await findSynonyms();
 
         if(!fetched.word){
           setRender(renderErrorEn())
@@ -56,6 +59,27 @@ const MeaningDisplay = () => {
       }
 
       setRelatedWords(data);
+
+    } catch (e) {
+      console.warn(e);
+      return false
+    }
+  }
+
+  async function findSynonyms(){
+    const url = `https://api.datamuse.com/words?rel_syn=${term.slice(1)}&max=10`;
+
+    try {
+      const req = await fetch(url);
+      const res = await req.json();
+
+      const data = [];
+
+      for(let item of res){
+        data.push(item.word)
+      }
+
+      setSyns(data);
 
     } catch (e) {
       console.warn(e);
@@ -209,6 +233,7 @@ const MeaningDisplay = () => {
     <>
       {render}
       {language.startsWith('en') && <RelatedWordsEn wordsArr={relatedWords} />}
+      {language.startsWith('en') && <Synonyms wordsArr={syns} />}
     </>
   )
 }
