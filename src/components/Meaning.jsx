@@ -3,12 +3,14 @@ import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import RelatedWordsEn from "./RelatedWordsEn";
 import Synonyms from "./Synonyms";
+import Antonyms from "./Antonyms";
 
 const MeaningDisplay = () => {
   const { language } = useContext(Context);
   const [fetched, setFetched] = useState({word: ''});
   const [relatedWords, setRelatedWords] = useState([]);
   const [syns, setSyns] = useState([]);
+  const [ants, setAnts] = useState([]);
   const { term } = useParams();
   const [render, setRender] = useState(renderLoading());
   const goTo = useNavigate();
@@ -29,6 +31,7 @@ const MeaningDisplay = () => {
         await handleFetchEn(term.slice(1));
         await findRelatedWordsEn();
         await findSynonyms();
+        await findAntonyms();
 
         if(!fetched.word){
           setRender(renderErrorEn())
@@ -80,6 +83,27 @@ const MeaningDisplay = () => {
       }
 
       setSyns(data);
+
+    } catch (e) {
+      console.warn(e);
+      return false
+    }
+  }
+
+  async function findAntonyms(){
+    const url = `https://api.datamuse.com/words?rel_ant=${term.slice(1)}&max=10`;
+
+    try {
+      const req = await fetch(url);
+      const res = await req.json();
+
+      const data = [];
+
+      for(let item of res){
+        data.push(item.word)
+      }
+
+      setAnts(data);
 
     } catch (e) {
       console.warn(e);
@@ -173,7 +197,7 @@ const MeaningDisplay = () => {
   function renderErrorEn(){
     return (
       <div className="meaning-display-en">
-        <h2>Term ({term.slice(1)}) not found</h2>
+        <h2>"{term.slice(1)}" not found</h2>
         <p>Try another term, we'll probably have a definition for that one.</p>
         <button onClick={() => goTo('/en')}>back</button>
       </div>
@@ -183,7 +207,7 @@ const MeaningDisplay = () => {
   function renderErrorPt(){
     return (
       <div className="meaning-display-pt">
-        <h2>Definição não encontrada</h2>
+        <h2>"{term.slice(1)}" não encontrada</h2>
         <p>Tente outra palavra, provavelmente temos a definição desta</p>
         <button onClick={() => goTo('/pt')}>voltar</button>
       </div>
@@ -234,6 +258,7 @@ const MeaningDisplay = () => {
       {render}
       {language.startsWith('en') && <RelatedWordsEn wordsArr={relatedWords} />}
       {language.startsWith('en') && <Synonyms wordsArr={syns} />}
+      {language.startsWith('en') && <Antonyms wordsArr={ants} />}
     </>
   )
 }
