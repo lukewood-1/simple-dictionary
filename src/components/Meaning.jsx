@@ -1,16 +1,19 @@
 import Context from "../context";
 import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import RelatedWordsEn from "./RelatedWordsEn";
 
 const MeaningDisplay = () => {
   const { language } = useContext(Context);
   const [fetched, setFetched] = useState({word: ''});
+  const [relatedWords, setRelatedWords] = useState([]);
   const { term } = useParams();
   const [render, setRender] = useState(renderLoading());
   const goTo = useNavigate();
 
   useEffect(() => {
     const abortController = new AbortController();
+
     const loadData = async () => {
       if(language.startsWith('pt')){
         await handleFetchPt();
@@ -21,7 +24,8 @@ const MeaningDisplay = () => {
           setRender(renderPt());
         }
       } else {
-        await handleFetchEn();
+        await handleFetchEn(term.slice(1));
+        await findRelatedWordsEn()
 
         if(!fetched.word){
           setRender(renderErrorEn())
@@ -36,7 +40,28 @@ const MeaningDisplay = () => {
     return () => {
       abortController.abort();
     }
-  }, [fetched.word, language])
+  }, [fetched.word, language, term])
+
+  async function findRelatedWordsEn(){
+    const url = `https://api.datamuse.com/words?rel_trg=${term.slice(1)}&max=5`;
+
+    try {
+      const req = await fetch(url);
+      const res = await req.json();
+
+      const data = [];
+
+      for(let item of res){
+        data.push(item.word)
+      }
+
+      setRelatedWords(data);
+
+    } catch (e) {
+      console.warn(e);
+      return false
+    }
+  }
 
   async function handleFetchEn(){
     const encodedTerm = encodeURIComponent(term.slice(1));
@@ -124,7 +149,7 @@ const MeaningDisplay = () => {
   function renderErrorEn(){
     return (
       <div className="meaning-display-en">
-        <h2>Term not found</h2>
+        <h2>Term ({term.slice(1)}) not found</h2>
         <p>Try another term, we'll probably have a definition for that one.</p>
         <button onClick={() => goTo('/en')}>back</button>
       </div>
@@ -180,7 +205,12 @@ const MeaningDisplay = () => {
     return <p className="loading-sign">$</p>
   }
 
-  return render
+  return (
+    <>
+      {render}
+      {language.startsWith('en') && <RelatedWordsEn wordsArr={relatedWords} />}
+    </>
+  )
 }
 
 export default MeaningDisplay
