@@ -1,9 +1,8 @@
-import Context from "../context";
-import { useContext, useNavigate } from "react";
+import { useNavigate } from "react-router-dom";
+import AppText from "../assets/AppText";
 
 function ErrorPage(){
-  const { language, AppText } = useContext(Context);
-  const book = AppText[language].ErrorPage;
+  const book = JSON.parse(AppText).en.ErrorPage;
   const goTo = useNavigate();
 
   return (

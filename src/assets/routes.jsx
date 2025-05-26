@@ -1,7 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
 import EnglishDic from '../components/EnglishDic';
-import PortugueseDic from '../components/PortugueseDic';
-import Portal from '../components/Portal';
 import Meaning from '../components/Meaning'
 import Search from '../components/Search';
 import ErrorPage from '../components/ErrorPage'
@@ -9,25 +7,7 @@ import ErrorPage from '../components/ErrorPage'
 const routes = createBrowserRouter([
   {
     path: '/',
-    element: <Portal />,
-    errorElement: <ErrorPage />
-  },
-  {
-    path: 'pt',
-    element: <PortugueseDic />,
-    children: [
-      {
-        index: true,
-        element: <Search />
-      },
-      {
-        path: 'meaning/:term',
-        element: <Meaning />
-      }
-    ]
-  },
-  {
-    path: 'en',
+    errorElement: <ErrorPage />,
     element: <EnglishDic />,
     children: [
       {

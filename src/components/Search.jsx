@@ -1,14 +1,18 @@
-import { useContext, useState } from 'react';
-import Context from '../context';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
+import AppText from '../assets/AppText';
 
 const Search = () => {
-  const { language, AppText } = useContext(Context)
   const [input, setInput] = useState('')
+
+  useEffect(() => {
+    const inputForm = document.getElementById('termSearch');
+    inputForm.focus();
+  })
 
   const navigate = useNavigate();
 
-  const book = JSON.parse(AppText)[language.slice(0,2)].SearchForm;
+  const book = JSON.parse(AppText)['en'].SearchForm;
 
   function handleInput(e){
     setInput(e.target.value);
@@ -27,7 +31,7 @@ const Search = () => {
   }
 
   return (
-    <div>
+    <div className='search'>
       <label htmlFor="termSearch">{book.label_termSearch}</label>
       <input type="text" id="termSearch" placeholder={book.input_placeholder} value={input} onChange={handleInput} onKeyDown={onEnter}/>
       <button onClick={onClick}>{book.button_search}</button>

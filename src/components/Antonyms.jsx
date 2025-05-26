@@ -4,11 +4,11 @@ function Antonyms({wordsArr}){
 
   return (
     <div className="antonyms">
-      <h3>Antonyms</h3>
-      <ul>
+      <h2>Antonyms</h2>
+      <ul className='plus-words'>
         {wordsArr.length === 0
-          ? <p>No antonyms found</p>
-          : wordsArr.map(word => <li key={word}><Link to={'/en/meaning/:' + word}>{word}</Link></li> )
+          ? <p>None found</p>
+          : wordsArr.map(word => <li key={word}><Link to={'/meaning/:' + word}>{word}</Link></li> )
         }
       </ul>
     </div>

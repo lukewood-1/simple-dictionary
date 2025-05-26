@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import AppText from "../assets/AppText";
 
 
-function Settings({language, setLanguage, AppText}){
+function Settings(){
   const [showSettings, setShowSettings] = useState(false);
 
-  const book = JSON.parse(AppText)[language.slice(0,2)].Settings;
+  const book = JSON.parse(AppText)['en'].Settings;
 
   useEffect(() => {
     const setModal = document.querySelector('.settings-window');
@@ -20,8 +21,8 @@ function Settings({language, setLanguage, AppText}){
     setShowSettings(!showSettings);
   }
 
-  function onLanguageSwitch(e){
-    setLanguage(e.target.value);
+  function onThemeChange(){
+    console.log('theme changed?')
   }
 
   return (<>
@@ -31,7 +32,7 @@ function Settings({language, setLanguage, AppText}){
         <button className="settings-window-close" onClick={handleSettingsShow}>X</button>
         <h2>{book.headline}</h2>
         <label htmlFor="theme-switch">{book.select_label}</label>
-        <select id='theme-switch' onChange={onLanguageSwitch}>
+        <select id='theme-switch' onChange={onThemeChange}>
           <option value="light">Light</option>
           <option value="dark">Dark</option>
         </select>

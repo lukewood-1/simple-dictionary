@@ -5,10 +5,10 @@ function Synonyms({wordsArr}){
   return (
     <div className="synonyms">
       <h2>Synonyms</h2>
-      <ul>
+      <ul className='plus-words'>
         {wordsArr.length === 0
-          ? <p>No synonyms</p>
-          : wordsArr.map(word => <li key={word}><Link to={'/en/meaning/:' + word}>{word}</Link></li>)
+          ? <p>None found</p>
+          : wordsArr.map(word => <li key={word}><Link to={'/meaning/:' + word}>{word}</Link></li>)
         }
       </ul>
     </div>
