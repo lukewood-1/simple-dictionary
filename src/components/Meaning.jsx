@@ -173,7 +173,9 @@ const MeaningDisplay = () => {
   }
 
   function renderLoading(){
-    return <p className="loading-sign">$</p>
+    return <p className="loading-sign">
+      <img src="/book-line.png" alt="$" />
+    </p>
   }
 
   return (
@@ -181,7 +183,9 @@ const MeaningDisplay = () => {
       {render}
       <div className="plus-services">
         <Synonyms wordsArr={syns} />
+        <hr />
         <RelatedWordsEn wordsArr={relatedWords} />
+        <hr />
         <Antonyms wordsArr={ants} />
       </div>
     </>

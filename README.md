@@ -1,1 +1,3 @@
-# simple-dictionary
+# English Dictionary(made with react)
+
+This project was made as practice to react router. Initially, I had the idea of building a dictionary. Then it moved to a bilingual(en/pt) dictionary. Then it moved to a bilingual dictionary with a translation service to help my dad study english. Then a shortage of decent portuguese dictionary APIs and translation APIs forced me to narrow the project to an english dictionary with synonyms, antonyms and related words.
