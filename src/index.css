@@ -169,9 +169,20 @@ img {
 }
 
 .loading-sign {
-  animation: spinHorizontally 1s linear infinite normal forwards;
-  scale: 1.5;
-  text-align: center;
+  width: 98vw;
+  height: 98vh;
+  position: absolute;
+  top: 0;
+  background: #0005;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & img {
+    animation: spinHorizontally 1.5s linear infinite normal forwards;
+    box-shadow: 0 0 1rem #fff;
+    scale: 3;
+  }
 }
 
 .meaning-display-en {
@@ -228,6 +239,7 @@ img {
 
   & > div {
     padding-inline: 0.5rem;
+    background: radial-gradient(transparent 20%, black);
   }
 }
 
@@ -235,8 +247,9 @@ img {
 	display: flex;
 	flex-flow: column;
 	height: clamp(5ch, 15vh, 4rem);
-  line-height: 1.5;
+  line-height: 2;
 	overflow-y: auto;
+  letter-spacing: 1px;
 }
 
 footer p {

@@ -3,6 +3,7 @@ import EnglishDic from '../components/EnglishDic';
 import Meaning from '../components/Meaning'
 import Search from '../components/Search';
 import ErrorPage from '../components/ErrorPage'
+import fetcher from './fetcher';
 
 const routes = createBrowserRouter([
   {
@@ -12,10 +13,13 @@ const routes = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Search />
+        element: <Search />,
       },
       {
         path: 'meaning/:term',
+        loader: async ({params}) => {
+          return fetcher(params.term);
+        },
         element: <Meaning />
       }
     ]
